@@ -11,10 +11,12 @@ import {Router} from '@angular/router';
 })
 export class LoginPageComponent implements OnInit {
 
-	constructor(private auth: AuthService, private router: Router) {
+	constructor(private auth: AuthService,
+	            private router: Router) {
 	}
 
 	form: FormGroup;
+	submitted = false;
 
 
 	ngOnInit(): void {
@@ -29,14 +31,17 @@ export class LoginPageComponent implements OnInit {
 			return;
 		}
 
+		this.submitted = true; // дизейблим кнопку
+
 		const user: User = {
 			email: this.form.value.email,
-			password: this.form.value.password,
+			password: this.form.value.password
 		};
 
-		this.auth.login(user).subscribe(() => {
+		this.auth.login(user).subscribe((response) => {
 			this.form.reset();
 			this.router.navigate(['/admin', 'dashboard']);
+			this.submitted = false;
 		});
 	}
 }
