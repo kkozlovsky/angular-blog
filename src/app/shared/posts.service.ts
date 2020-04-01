@@ -32,8 +32,23 @@ export class PostsService {
 			}));
 	}
 
+	getById(id: string): Observable<Post> {
+		return this.http.get<Post>(`${environment.databaseUrl}/posts/${id}.json`)
+			.pipe(map((post: Post) => {
+				return {
+					...post,
+					id,
+					date: new Date(post.date)
+				};
+			}));
+	}
+
 	remove(id: string): Observable<void> {
 		return this.http.delete<void>(`${environment.databaseUrl}/posts/${id}.json`);
+	}
+
+	update(post: Post): Observable<Post> {
+		return this.http.patch<Post>(`${environment.databaseUrl}/posts/${post.id}.json`, post);
 	}
 
 }
